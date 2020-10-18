@@ -1,6 +1,6 @@
-##What is a Spring Bean? [link](https://www.baeldung.com/spring-bean)
+## What is a Spring Bean? [link](https://www.baeldung.com/spring-bean)
 
-###1. Bean Definition
+### 1. Bean Definition
 
 Here's a definition of beans in the Spring Framework documentation:
 
@@ -8,7 +8,7 @@ In Spring, the objects that form the backbone of your application and that are m
 
 This definition is concise and gets to the point, but misses an important thing – Spring IoC container. Let's go down the rabbit hole to see what it is and the benefits it brings in.
 
-###2. Inversion of Control
+### 2. Inversion of Control
 
 Simply put, Inversion of Control, or IoC for short, is a process in which an object defines its dependencies without creating them. This object delegates the job of constructing such dependencies to an IoC container.
 
@@ -16,7 +16,7 @@ Instead of constructing dependencies by itself, an object can retrieve its depen
 
 Let's start with the declaration of a couple of domain classes before diving into IoC.
 
-####2.1. Traditional Approach (without the IoC container):
+#### 2.1. Traditional Approach (without the IoC container):
 Assume we have a class declaration:
 
 ```java
@@ -58,7 +58,7 @@ Managing such a number of objects is nothing short of a nightmare. This is where
 
 Instead of constructing dependencies by itself, an object can retrieve its dependencies from an IoC container. All we need to do is to provide the container with appropriate configuration metadata.
 
-####2.2. Beans Configuration and IoC in Action:
+#### 2.2. Beans Configuration and IoC in Action:
 
 - First off, let's decorate the Company class with the @Component annotation:
 ```java
@@ -98,7 +98,7 @@ assertEquals(1000, company.getAddress().getNumber());
 The result proves that the IoC container has created and initialized beans correctly.
 ```
 
-##Spring Bean Annotations [link1](https://www.baeldung.com/spring-bean-annotations), [link2](https://www.baeldung.com/spring-component-repository-service)
+## Spring Bean Annotations [link1](https://www.baeldung.com/spring-bean-annotations), [link2](https://www.baeldung.com/spring-component-repository-service)
 In this section, we'll discuss the most common Spring bean annotations used to define different types of beans.
 
 There're several ways to configure beans in a Spring container: 
@@ -107,7 +107,7 @@ There're several ways to configure beans in a Spring container:
 - Or we can mark the class with one of the annotations from the org.springframework.stereotype package and leave the rest
  to component scanning.
  
-###1. Component Scanning
+### 1. Component Scanning
 Spring can automatically scan a package for beans if component scanning is enabled.
 
 @ComponentScan configures which packages to scan for classes with annotation configuration. 
@@ -148,7 +148,7 @@ When using XML configuration, the configuring component scanning is just as easy
 ```      
 <context:component-scan base-package="com.baeldung" />
 ```
-###2. @Configuration and @Bean annotations:
+### 2. @Configuration and @Bean annotations:
 @Configuration is a class level annotation, whereas @Bean is a method-level annotation. 
 @Configuration classes hold the @ComponentScan annotation.
 @Configuration classes can contain bean definition methods annotated with @Bean:
@@ -163,7 +163,7 @@ class VehicleFactoryConfig {
  
 }
 ```
-###3. Stereotype annotations : 
+### 3. Stereotype annotations : 
 In most typical applications, we have distinct layers like data access, presentation, service, business, etc.
 And, in each layer, we have various beans. Simply put, to detect them automatically,  
 Spring uses classpath scanning annotations. Then, it registers each bean in the ApplicationContext.
@@ -237,13 +237,13 @@ public class VehicleController {
 }
 ```
 
-##Guide to Spring @Autowired [link](https://www.baeldung.com/spring-autowire)
+## Guide to Spring @Autowired [link](https://www.baeldung.com/spring-autowire)
 The main annotation of Dependency Injection is @Autowired. 
 It allows Spring to resolve and inject collaborating beans into our bean.
 In this section, we'll first take a look at how to enable autowiring and the various ways to autowire beans. 
 Afterward, we'll talk about resolving bean conflicts using @Qualifier annotation, as well as potential exception scenarios.
 
-###1. Enabling @Autowired Annotations:
+### 1. Enabling @Autowired Annotations:
 The Spring framework enables automatic dependency injection. In other words, by declaring all the bean dependencies in a Spring configuration file, Spring container can autowire relationships between collaborating beans. This is called Spring bean autowiring.
 
 To use Java-based configuration in our application, let's enable annotation-driven injection to load our Spring configuration:
@@ -267,10 +267,10 @@ class VehicleFactoryApplication {
 ```
 As a result, when we run this Spring Boot application, it will automatically scan the components in the current package and its sub-packages. Thus it will register them in Spring's Application Context, and allow us to inject beans using @Autowired.
 
-###2. Using @Autowired:
+### 2. Using @Autowired:
 After enabling annotation injection, we can use autowiring on properties, setters, and constructors.
 
-####2.1. @Autowired on Properties
+#### 2.1. @Autowired on Properties
 Let’s see how we can annotate a property using @Autowired. This eliminates the need for getters and setters.
 
 First, let's define a fooFormatter bean:
@@ -293,7 +293,7 @@ public class FooService {
 ```
 As a result, Spring injects fooFormatter when FooService is created.
 
-####2.2. @Autowired on Setters
+#### 2.2. @Autowired on Setters
 Now let's try adding @Autowired annotation on a setter method.
 
 In the following example, the setter method is called with the instance of FooFormatter when FooService is created:
@@ -306,7 +306,7 @@ public class FooService {
     }
 }
 ```
-####2.3. @Autowired on Constructors:
+#### 2.3. @Autowired on Constructors:
 
 Finally, let's use @Autowired on a constructor.
 
@@ -320,7 +320,7 @@ public class FooService {
     }
 }
 ```
-###3. @Autowired and Optional Dependencies
+### 3. @Autowired and Optional Dependencies
 When a bean is being constructed, the @Autowired dependencies should be available. Otherwise, if Spring cannot resolve a bean for wiring, it will throw an exception.
 
 Consequently, it prevents the Spring container from launching successfully with an exception of the form:
@@ -338,12 +338,12 @@ public class FooService {
     private FooDAO dataAccessor; 
 }
 ```
-###4. Autowire Disambiguation:
+### 4. Autowire Disambiguation:
 By default, Spring resolves @Autowired entries by type. 
 If more than one bean of the same type is available in the container, the framework will throw a fatal exception.
 
 To resolve this conflict, we need to tell Spring explicitly which bean we want to inject.
-####4.1. Autowiring by @Qualifier:
+#### 4.1. Autowiring by @Qualifier:
 For instance, let's see how we can use the @Qualifier annotation to indicate the required bean.
 
 First, we'll define 2 beans of type Formatter:
@@ -387,7 +387,7 @@ When there are multiple beans of the same type, it's a good idea to use @Qualifi
 
 Please note that the value of the @Qualifier annotation matches with the name declared in 
 the @Component annotation of our FooFormatter implementation.
-####4.2. Autowiring by Name:
+#### 4.2. Autowiring by Name:
 Spring uses the bean's name as a default qualifier value. 
 It will inspect the container and look for a bean with the exact name as the property to autowire it.
 
