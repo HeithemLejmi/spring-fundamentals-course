@@ -128,6 +128,46 @@ public class AppConfig {
 ```
 
 ### d. Constructor Injection:
+Constructor injection is just like setter injection. 
+Instead of calling the setter, we call the defined constructor of the **SpeakerServiceImpl** and we pass the collaborating
+ bean **speakerRepository** as an argument to this constructor and that is it.
+- **Step 1**: Define the constructor that takes **speakerRepository** as an argument:
+```java
+public class SpeakerServiceImpl implements SpeakerService {
+
+  SpeakerRepository repository;
+
+  /** Constructor **/
+  public SpeakerServiceImpl(SpeakerRepository speakerRepository){
+    this.repository = speakerRepository;
+  }
+
+  public List<Speaker> findAll(){
+    return repository.findAll();
+  }
+
+}
+```
+
+- **Step 2**: Replace the setter with the constructor, and inject the collaborating bean **speakerRepository** as an
+ argument of this constructor:
+```java
+@Configuration
+public class AppConfig {
+
+  @Bean(name = "speakerService")
+  public SpeakerService getSpeakerService(){
+    // using Constructor injection to inject the collaborating bean "speakerRepository" inside the "speakerService":
+    SpeakerServiceImpl speakerService = new SpeakerServiceImpl(getSpeakerRepository());
+    return speakerService;
+  }
+
+  @Bean(name = "speakerRepository")
+  public SpeakerRepository getSpeakerRepository(){
+    return new HibernateSpeakerRepositoryImpl();
+  }
+}
+```
 
 ## 4. Spring Scopes and Autowiring [here](https://github.com/HeithemLejmi/spring-fundamentals-course/blob/doc/add_documentation/doc/5_spring-scopes-and-autowiring-slides.pdf)
 
