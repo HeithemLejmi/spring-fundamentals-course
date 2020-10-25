@@ -3,7 +3,9 @@ package com.pluralsight.repository;
 import com.pluralsight.model.Speaker;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.stereotype.Repository;
 
+@Repository("speakerRepository")
 public class HibernateSpeakerRepositoryImpl implements SpeakerRepository {
 
 

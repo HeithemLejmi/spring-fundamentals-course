@@ -346,6 +346,66 @@ SpeakerService NoArgsConstructor
 SpeakerService Setter
 Heithem
  ```
+
+### 4.3. Stereotype Annotations:
+At the previous example, we used a setter/constructor injection to inject the dependency, and we showed a hybrid autowiring
+(not fully autowiring) because we still need to define/construct our Beans inside the @Configuration class (still having
+ our beans defined/configured in that AppConfig). 
+But, in order to go with full autowiring of our beans, we should not need to define our beans in the Configuration Classes
+(zero code in the @Configuration class => Convention over Configuration). That's what we are going to discover in this
+section, using the stereotype annotations (@Service, @Repository)
+
+- **Step 1**: Mark the SpeakerServiceImpl as @Service and named `speakerService`, and the SpeakerRepositoryImpl as
+ @Repository and named `speakerRepository`. 
+This will automatically create two Spring Beans of type : @Component (one on the Service layer, and the 2nd on the Repository
+ layer).
+ ```java
+@Repository("speakerRepository")
+public class HibernateSpeakerRepositoryImpl implements SpeakerRepository {
+
+}
+
+@Service("speakerService")
+public class SpeakerServiceImpl implements SpeakerService {
+  @Autowired
+  @Qualifier(value = "speakerRepository")
+  SpeakerRepository repository;
+
+  public SpeakerServiceImpl(){
+    System.out.println("SpeakerService NoArgsConstructor");
+  }
+
+  public SpeakerServiceImpl(SpeakerRepository speakerRepository){
+    System.out.println("SpeakerService AllArgsConstructor");
+    this.repository = speakerRepository;
+  }
+
+
+  public void setSpeakerRepository(SpeakerRepository speakerRepository){
+    System.out.println("SpeakerService Setter");
+    this.repository = speakerRepository;
+  }
+
+  public List<Speaker> findAll(){
+    return repository.findAll();
+  }
+
+}
+ ```
+- **Step 2**: Now, as the @Component are created, we leave the rest to the ComponentScanning which will pick-up these
+components (Spring Beans), and register them on the Application Context (on the Spring IoC Container).  To do that, we
+only need to annotate the Configuration class with @ComponentScan, to tell the Container where to look to detect the
+ Spring Beans:
+ ```java
+@Configuration
+@ComponentScan
+public class AppConfig {
+
+}
+ ```
+- **Step 3**: Remove all the Bean Configuration codes from the Configuration class, because we no longer need them, as
+ the Beans are declared and configured by the Stereotype Annotations
+
 ## 5. Spring Configuration Using XML [here](https://github.com/HeithemLejmi/spring-fundamentals-course/blob/doc/add_documentation/doc/6_spring-configuration-using-xml-slides.pdf)
 
 ## 6. Advanced Bean Configuration [here](https://github.com/HeithemLejmi/spring-fundamentals-course/blob/doc/add_documentation/doc/7_advanced-bean-configuration-slides.pdf)

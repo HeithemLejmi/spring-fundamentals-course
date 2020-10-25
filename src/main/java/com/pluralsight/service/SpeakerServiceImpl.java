@@ -4,9 +4,13 @@ import com.pluralsight.model.Speaker;
 import com.pluralsight.repository.SpeakerRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
+@Service("speakerService")
 public class SpeakerServiceImpl implements SpeakerService {
-
+  @Autowired
+  @Qualifier(value = "speakerRepository")
   SpeakerRepository repository;
 
   public SpeakerServiceImpl(){
@@ -18,7 +22,7 @@ public class SpeakerServiceImpl implements SpeakerService {
     this.repository = speakerRepository;
   }
 
-  @Autowired
+
   public void setSpeakerRepository(SpeakerRepository speakerRepository){
     System.out.println("SpeakerService Setter");
     this.repository = speakerRepository;
