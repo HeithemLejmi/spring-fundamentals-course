@@ -15,14 +15,7 @@ public class AppConfig {
   @Bean(name = "speakerService")
   @Scope(value = BeanDefinition.SCOPE_SINGLETON)
   public SpeakerService getSpeakerService(){
-    // using Constructor injection to inject the collaborating bean "speakerRepository" inside the "speakerService":
-    SpeakerServiceImpl speakerService = new SpeakerServiceImpl(getSpeakerRepository());
-
-    /** Using Setter Injection of the collaborating bean "speakerRepository" inside the "speakerService":
     SpeakerServiceImpl speakerService = new SpeakerServiceImpl();
-    speakerService.setSpeakerRepository(getSpeakerRepository());
-     */
-
     return speakerService;
   }
 
