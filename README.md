@@ -417,13 +417,84 @@ The bean lifecycle starts off with :
 - III. Then it moves onto **BeanNameAware** where the framework sets the bean name and makes it aware to other resources. 
 - IV. We can then set that as a **BeanFactoryAware** context. 
 - V. Next, we do **Pre initialization** -utilizing-> **BeanPostProcessors**. From here, we can initialize the bean utilizing
- properties that were just set. 
+ properties that were just set. There are two kinds of beans in the Spring bean container: ordinary beans and factory beans. Spring uses the former directly, whereas latter can produce objects themselves, which are managed by the framework.
+
+And, simply put, we can build a factory bean by implementing org.springframework.beans.factory.FactoryBean interface.
 - VI. Now we can call an **InitMethod**, (by annotating this method with **@PostConstruct**) and this is actually the piece
  that we're going to demonstrate that's very useful even in this fundamentals course, 
 - VII. and then you wrap up that entire initialization process with another set of **BeanPostProcessors**. 
 
 ![](img/BeanLifeCycle.png)
+
 ### 6.2. FactoryBean
+- There are two kinds of beans in the Spring bean container: ordinary beans and factory beans. 
+- Spring uses the former directly, whereas latter can produce objects themselves, which are managed by the framework.
+- And, simply put, we can build a factory bean by implementing org.springframework.beans.factory.FactoryBean interface.
+
+- Now, let's implement an example **FactoryBean**. We'll implement a CalendarFactory which produces objects of the type
+ **Calendar**:
+ ```java
+ public class CalendarFactory implements FactoryBean<Calendar> {
+ 
+   private Calendar instance = Calendar.getInstance();
+ 
+   @Override
+   public Calendar getObject() throws Exception {
+     return instance;
+   }
+ 
+   @Override
+   public Class<?> getObjectType() {
+     return Calendar.class;
+   }
+ 
+   public void addDays(int num){
+     instance.add(Calendar.DAY_OF_YEAR, num);
+   }
+ }
+ ```
+- Use FactoryBean with Java-based configuration, we have to call the FactoryBean‘s getObject() method explicitly:
+ ```java
+ @Configuration
+ @ComponentScan
+ public class AppConfig {
+ 
+   @Bean(name = "cal")
+   public CalendarFactory calFactory(){
+     CalendarFactory calendarFactory = new CalendarFactory();
+     calendarFactory.addDays(2);
+     return calendarFactory;
+   }
+ 
+   @Bean
+   Calendar cal() throws Exception{
+     return calFactory().getObject();
+   }
+ }
+```
+- Inject this bean:
+```java
+@Repository("speakerRepository")
+public class SpeakerRepositoryImpl implements SpeakerRepository {
+  
+  // Inject the bean on this field
+  @Autowired
+  Calendar cal;
+
+  public List<Speaker> findAll(){
+    List<Speaker> speakers = new ArrayList<Speaker>();
+    Speaker speaker = new Speaker();
+    speaker.setFirstName("Heithem");
+    speaker.setLastName("Lejmi");
+    speakers.add(speaker);
+    
+    System.out.println("Cal is: " + cal.getTime());
+
+    return speakers;
+  }
+
+}
+```
 ### 6.3. SpEL
 ### 6.4. Proxies
 ### 6.5. Bean Profiles
