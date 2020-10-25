@@ -127,8 +127,8 @@ Also, we can point to classes in the base packages with the basePackageClasses a
 
 Both arguments are arrays so that we can provide multiple packages for each.
 If no argument is specified, the scanning happens from the same package where the @ComponentScan annotated class is present.
-```     java 
 @ComponentScan leverages the Java 8 repeating annotations feature, which means we can mark a class with it multiple times:
+```     java 
   @Configuration
   @ComponentScan(basePackages = "com.baeldung.annotations")
   @ComponentScan(basePackageClasses = VehicleFactoryConfig.class)
