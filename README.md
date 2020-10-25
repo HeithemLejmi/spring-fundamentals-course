@@ -222,7 +222,49 @@ Address of the 1st instance is : com.pluralsight.service.SpeakerServiceImpl@581a
 Address of the 2nd instance is : com.pluralsight.service.SpeakerServiceImpl@581ac8a8
 ```
 ##### Prototype Scope:
+- The prototype design pattern guarantees **a unique instance per request**, and, thus, the scope inside of a Spring
+ container mimics that design pattern: **Each time you request a bean from the container, you're guaranteed a unique
+  instance.** 
+- It is essentially the opposite of a singleton. 
+- In order to apply the **Prototype Scope, we need to replace the **value** inside the **@Scope** annotation by
+ SCOPE_PROTOTYPE instead of SCOPE_SINGLETON. 
+ ```java
+ @Configuration
+ public class AppConfig {
+ 
+   @Bean(name = "speakerService")
+   @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
+   public SpeakerService getSpeakerService(){
+     SpeakerServiceImpl speakerService = new SpeakerServiceImpl(getSpeakerRepository());
+     return speakerService;
+   }
+ }
+ ```
+In order to test whether we have one and unique object of a bean we can create two instances of the same bean and check
+ if they point to the same object or not:
+```java
+   public static void main(String args[]){
+     // Create the application context based on the @Configuration class : which creates the Spring IoC Container
+     ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+     // We are creating two instances of the same bean "speakerService":
+     SpeakerService speakerService1 = context.getBean("speakerService", SpeakerService.class);
+     SpeakerService speakerService2 = context.getBean("speakerService", SpeakerService.class);
+     // Here we can test that both instances are pointing to the same object:
+     SpeakerService speakerService2 = context.getBean("speakerService", SpeakerService.class);
+    System.out.println("Address of the 1st instance is : " + speakerService1);
+    System.out.println("Address of the 2nd instance is : " + speakerService2);
+   }
+```
+The output of these `System.out.println` is 2 different addresses => so we really have one instance per request (our object address has changed per request)
+ => `PROTOTYPE_PATTERN` proven:
+```
+Address of the 1st instance is : com.pluralsight.service.SpeakerServiceImpl@78123e82
+Address of the 2nd instance is : com.pluralsight.service.SpeakerServiceImpl@67c33749
+```
+NB: it is now giving us **a unique bean per request**, now, per request of the bean from the context. 
+If you hang onto that bean and do stuff with it for the next 10 minutes, it will still be the same bean, but every time we ask for a new one for the container, it's going to give us a unique one back. 
 
+Just so we don't mess up any future demos, let's go ahead and change that back to SINGLETON. (for the rest of the course)
 ## 5. Spring Configuration Using XML [here](https://github.com/HeithemLejmi/spring-fundamentals-course/blob/doc/add_documentation/doc/6_spring-configuration-using-xml-slides.pdf)
 
 ## 6. Advanced Bean Configuration [here](https://github.com/HeithemLejmi/spring-fundamentals-course/blob/doc/add_documentation/doc/7_advanced-bean-configuration-slides.pdf)
