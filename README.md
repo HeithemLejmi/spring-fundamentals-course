@@ -283,6 +283,69 @@ There are 3  web scopes:
   - so once I access it, it's alive for the duration of that application, not just my visit to that application. 
   - You could think of it as singleton, but it's really the entire life of that application on the server until it gets
    undeployed or the server gets rebooted.
+ 
+### 4.2. Autowired:
+Autowiring is a great technique used to reduce the wiring up and configuration of code. 
+If you've ever heard the term convention over configuration, this is it. (reduce the configuration code in the
+ @Configuration class thanks to the @Autowired annotation)
+To autowire our applications using the Java configuration:
+- we just simply need to add a @ComponentScan to our @Configuration class, to scan the package `com.pluralsight` for Beans, this is where I should begin looking for autowired annotations. 
+- To use autowiring, you just mark whatever bean you want as autowired (to inject this Bean as a field, or an argument
+ for a setter/constructor): 
+  - you can choose by name, and that uses the @Bean name
+  - or by type, and that uses the instance type. 
+- For example, we marked the setter in the `SpeakerServiceImpl` with `@Autowired` in order to wire the 
+`speakerRepository` collaborating bean to the `speakerService` bean:
+  
+  ```java 
+    public class SpeakerServiceImpl implements SpeakerService {
+      SpeakerRepository repository;
+    
+      public SpeakerServiceImpl(){
+        System.out.println("SpeakerService NoArgsConstructor");
+      }
+    
+      public SpeakerServiceImpl(SpeakerRepository speakerRepository){
+        System.out.println("SpeakerService AllArgsConstructor");
+        this.repository = speakerRepository;
+      }
+    
+      @Autowired
+      public void setSpeakerRepository(SpeakerRepository speakerRepository){
+        System.out.println("SpeakerService Setter");
+        this.repository = speakerRepository;
+      }
+    
+      public List<Speaker> findAll(){
+        return repository.findAll();
+      }
+    }
+  ```
+- And in the `@Configuration` class we only call the NoArgsConstructor of the `speakerService`, and re-run the application: 
+ ```java
+@Configuration
+public class AppConfig {
+
+  @Bean(name = "speakerService")
+  @Scope(value = BeanDefinition.SCOPE_SINGLETON)
+  public SpeakerService getSpeakerService(){
+    SpeakerServiceImpl speakerService = new SpeakerServiceImpl();
+    return speakerService;
+  }
+
+  @Bean(name = "speakerRepository")
+  @Scope(value = BeanDefinition.SCOPE_SINGLETON)
+  public SpeakerRepository getSpeakerRepository(){
+    return new HibernateSpeakerRepositoryImpl();
+  }
+}
+ ```
+The output on the terminal is as below, which means that the wiring was successful, and that we go through the setter:
+ ```
+SpeakerService NoArgsConstructor
+SpeakerService Setter
+Heithem
+ ```
 ## 5. Spring Configuration Using XML [here](https://github.com/HeithemLejmi/spring-fundamentals-course/blob/doc/add_documentation/doc/6_spring-configuration-using-xml-slides.pdf)
 
 ## 6. Advanced Bean Configuration [here](https://github.com/HeithemLejmi/spring-fundamentals-course/blob/doc/add_documentation/doc/7_advanced-bean-configuration-slides.pdf)
