@@ -4,7 +4,7 @@
 
 ## 3. Spring Configuration Using Java [here](https://github.com/HeithemLejmi/spring-fundamentals-course/blob/doc/add_documentation/doc/4_spring-configuration-using-java-slides.pdf)
 
-### a. @Configuration
+### 3.1. @Configuration
 - To start the configuration of our application, we're going to use a @Configuration annotation. 
 - The Java classes that have the configuration annotation replace any XML files that we could've used historically:
 
@@ -20,7 +20,7 @@ public class AppConfig {
 
 }
 ```
-### b. @Bean
+### 3.2. @Bean
 - @Bean annotation is a Method level annotation: used to define/construct Spring Bean, inside a class annotated with
  @Configuration.
 - this annotation is used to get instances of Spring beans : a method annotated with @Bean returns an instance of Spring bean, 
@@ -45,7 +45,7 @@ This is it. We've literally:
 1. Spring enabled our application. 
 2. We've told it to configure this as a Spring app, and we've created a bean, (in the example : our speakerService). 
 
-### c. Setter Injection : 
+### 3.3. Setter Injection : 
 Setter injection using the Java configuration approach is simply a matter of **calling a setter on a bean**. 
 It is used to inject a collaborating bean, inside another bean:
 We know already that SpeakerService has a dependency to SpeakerRepository => So we are going to inject the dependency
@@ -127,7 +127,7 @@ public class AppConfig {
   }
 ```
 
-### d. Constructor Injection:
+### 3.4. Constructor Injection:
 Constructor injection is just like setter injection. 
 Instead of calling the setter, we call the defined constructor of the **SpeakerServiceImpl** and we pass the collaborating
  bean **speakerRepository** as an argument to this constructor and that is it.
@@ -170,6 +170,58 @@ public class AppConfig {
 ```
 
 ## 4. Spring Scopes and Autowiring [here](https://github.com/HeithemLejmi/spring-fundamentals-course/blob/doc/add_documentation/doc/5_spring-scopes-and-autowiring-slides.pdf)
+### 4.1. Scopes: 
+There are 5 scopes available inside of Spring for us to configure a bean inside of our application. 
+- Valid in any configuration:
+  - Singleton Scope: is the default scope.
+  - Prototype Scope: which is actually a **new bean per request**
+- Scopes valid only in web-aware Spring projects (*) are : 
+  - request
+  - session
+  - global
+(*) So if you're implementing Spring MVC or even doing a single-page model application to where you're doing microservices
+ to your front end, those 3 scopes are only available in that context. 
+
+##### Singleton Scope:
+- The singleton design pattern restricts the instantiation of a class to just one object. 
+- A singleton is the default bean scope inside of Spring. 
+So if you don't give it a scope, it will automatically be assigned the default scope of singleton, which means that **there
+ is one instance per Spring container or application context**.
+- To apply the Singleton Scope on a Bean, we only need to annotate that Bean with **@Scope** annotation and select the
+ **value** : *BeanDefinition.SCOPE_SINGLETON*.
+```java
+@Configuration
+public class AppConfig {
+
+  @Bean(name = "speakerService")
+  @Scope(value = BeanDefinition.SCOPE_SINGLETON)
+  public SpeakerService getSpeakerService(){
+    SpeakerServiceImpl speakerService = new SpeakerServiceImpl(getSpeakerRepository());
+    return speakerService;
+  }
+}
+```
+In order to test whether we have one and unique object of a bean we can create two instances of the same bean and check
+ if they point to the same object or not:
+```java
+   public static void main(String args[]){
+     // Create the application context based on the @Configuration class : which creates the Spring IoC Container
+     ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+     // We are creating two instances of the same bean "speakerService":
+     SpeakerService speakerService1 = context.getBean("speakerService", SpeakerService.class);
+     SpeakerService speakerService2 = context.getBean("speakerService", SpeakerService.class);
+     // Here we can test that both instances are pointing to the same object:
+     SpeakerService speakerService2 = context.getBean("speakerService", SpeakerService.class);
+    System.out.println("Address of the 1st instance is : " + speakerService1);
+    System.out.println("Address of the 2nd instance is : " + speakerService2);
+   }
+```
+The output of these `System.out.println` is the same address => same object => `SINGLETON_PATTERN` proven:
+```
+Address of the 1st instance is : com.pluralsight.service.SpeakerServiceImpl@581ac8a8
+Address of the 2nd instance is : com.pluralsight.service.SpeakerServiceImpl@581ac8a8
+```
+##### Prototype Scope:
 
 ## 5. Spring Configuration Using XML [here](https://github.com/HeithemLejmi/spring-fundamentals-course/blob/doc/add_documentation/doc/6_spring-configuration-using-xml-slides.pdf)
 
