@@ -12,6 +12,7 @@ public class Application {
     SpeakerService speakerService = context.getBean("speakerService", SpeakerService.class);
     // Here we can test that we really get the dependency injected inside "speakerService"
     System.out.println(speakerService.findAll().get(0).getFirstName());
+    System.out.println(speakerService.findAll().get(0).getAge());
   }
 
 
