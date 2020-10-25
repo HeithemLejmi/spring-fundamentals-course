@@ -409,3 +409,21 @@ public class AppConfig {
 ## 5. Spring Configuration Using XML [here](https://github.com/HeithemLejmi/spring-fundamentals-course/blob/doc/add_documentation/doc/6_spring-configuration-using-xml-slides.pdf)
 
 ## 6. Advanced Bean Configuration [here](https://github.com/HeithemLejmi/spring-fundamentals-course/blob/doc/add_documentation/doc/7_advanced-bean-configuration-slides.pdf)
+### 6.1. Bean Lifecycle
+The bean lifecycle starts off with :
+- I. **Instantiation** 
+- II. and then it moves onto **Populate properties** (These are read from either a properties file or injected in from other
+ resources).
+- III. Then it moves onto **BeanNameAware** where the framework sets the bean name and makes it aware to other resources. 
+- IV. We can then set that as a **BeanFactoryAware** context. 
+- V. Next, we do **Pre initialization** -utilizing-> **BeanPostProcessors**. From here, we can initialize the bean utilizing
+ properties that were just set. 
+- VI. Now we can call an **InitMethod**, (by annotating this method with **@PostConstruct**) and this is actually the piece
+ that we're going to demonstrate that's very useful even in this fundamentals course, 
+- VII. and then you wrap up that entire initialization process with another set of **BeanPostProcessors**. 
+
+![](img/BeanLifeCycle.png)
+### 6.2. FactoryBean
+### 6.3. SpEL
+### 6.4. Proxies
+### 6.5. Bean Profiles
