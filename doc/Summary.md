@@ -1,3 +1,26 @@
+# Summary:
+### [What is a Spring Bean](https://github.com/HeithemLejmi/spring-fundamentals-course/blob/master/doc/Summary.md#what-is-a-spring-bean-link)
+#### 1. Bean Definition
+#### 2. Inversion of Control
+- 2.1. Traditional Approach (without the IoC container):
+- 2.2. Beans Configuration and IoC in Action:
+### [Spring Bean Annotations](https://github.com/HeithemLejmi/spring-fundamentals-course/blob/master/doc/Summary.md#spring-bean-annotations-link1-link2)
+#### 1. Component Scanning
+#### 2. @Configuration and @Bean annotations:
+#### 3. Stereotype annotations :
+### [Guide to Spring @Autowired](https://github.com/HeithemLejmi/spring-fundamentals-course/blob/master/doc/Summary.md#guide-to-spring-autowired-link)
+#### 1. Enabling @Autowired Annotations:
+#### 2. Using @Autowired:
+- 2.1. @Autowired on Properties
+- 2.2. @Autowired on Setters
+- 2.3. @Autowired on Constructors:
+#### 3. @Autowired and Optional Dependencies
+#### 4. Autowire Disambiguation:
+- 4.1. Autowiring by @Qualifier:
+- 4.2. Autowiring by Name:
+---------------------------------------------------------
+
+
 ## What is a Spring Bean? [link](https://www.baeldung.com/spring-bean)
 
 ### 1. Bean Definition
