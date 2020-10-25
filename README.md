@@ -495,6 +495,24 @@ public class SpeakerRepositoryImpl implements SpeakerRepository {
 
 }
 ```
-### 6.3. SpEL
-### 6.4. Proxies
-### 6.5. Bean Profiles
+### 6.3. SpEL (Spring Expression Language)
+By using the annotation `@Value` on a field or a property inside a @Configuration class or @Component/@Repostiory/@Service
+/.. classes
+ ```java
+@Service("speakerRepository")
+public class SpeakerRepositoryImpl implements SpeakerRepository {
+
+  @Value("#{T(Math).random()*50}")
+  private double age;
+
+}
+```
+
+### 6.4. Bean Profiles
+We can define at which profile or environment (dev, qa, prod), we wish that our Spring Beans to be created, by using the
+annotation `@Profile` at the moment of defining the Spring Bean (either after the stereotype annotation, or after the @Bean annotation inside a Configuration class):
+ ```java
+@Service("speakerService")
+@Profile("prod")
+public class SpeakerServiceImpl implements SpeakerService {}
+```
