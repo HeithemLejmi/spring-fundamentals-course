@@ -265,6 +265,24 @@ NB: it is now giving us **a unique bean per request**, now, per request of the b
 If you hang onto that bean and do stuff with it for the next 10 minutes, it will still be the same bean, but every time we ask for a new one for the container, it's going to give us a unique one back. 
 
 Just so we don't mess up any future demos, let's go ahead and change that back to SINGLETON. (for the rest of the course)
+
+#### Web Scopes:
+Web scopes are beyond this course since it's just a basic Spring fundamentals course. 
+They are covered more in the Introduction to Spring MVC course that's available here on Pluralsight.
+
+There are 3  web scopes: 
+- Request scope: 
+  - **which returns a bean per HTTP request**, 
+  - which sounds a lot like prototype except it's for the lifecycle of a bean request, which is fairly short, 
+  but longer than prototype where it's one instance per every time I ask the container for a bean. 
+- Session scope: 
+  - just **returns a single bean per HTTP session**, and that will live as long as that user session is alive, so 10
+ minutes, 20 minutes, 30 minutes, however long they're alive on that website a bean of scope session will stick around. 
+- globalSession Scope:
+  - which **will return a single bean per application**, 
+  - so once I access it, it's alive for the duration of that application, not just my visit to that application. 
+  - You could think of it as singleton, but it's really the entire life of that application on the server until it gets
+   undeployed or the server gets rebooted.
 ## 5. Spring Configuration Using XML [here](https://github.com/HeithemLejmi/spring-fundamentals-course/blob/doc/add_documentation/doc/6_spring-configuration-using-xml-slides.pdf)
 
 ## 6. Advanced Bean Configuration [here](https://github.com/HeithemLejmi/spring-fundamentals-course/blob/doc/add_documentation/doc/7_advanced-bean-configuration-slides.pdf)
