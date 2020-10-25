@@ -12,9 +12,14 @@ public class AppConfig {
 
   @Bean(name = "speakerService")
   public SpeakerService getSpeakerService(){
+    // using Constructor injection to inject the collaborating bean "speakerRepository" inside the "speakerService":
+    SpeakerServiceImpl speakerService = new SpeakerServiceImpl(getSpeakerRepository());
+
+    /** Using Setter Injection of the collaborating bean "speakerRepository" inside the "speakerService":
     SpeakerServiceImpl speakerService = new SpeakerServiceImpl();
-    // Setter Injection of the collaborating bean "speakerRepository" inside the "speakerService":
     speakerService.setSpeakerRepository(getSpeakerRepository());
+     */
+
     return speakerService;
   }
 
